@@ -1,6 +1,6 @@
 {
   "name": "@3mcode/tree-helper",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "some useful tree functions",
   "main": "dist/index.js",
   "scripts": {
@@ -19,7 +19,7 @@
     "url": "https://github.com/flyaway98/treehelper/issues"
   },
   "homepage": "https://github.com/flyaway98/treehelper#readme",
-  "dependencies": {
+  "devDependencies": {
     "@babel/cli": "^7.16.8",
     "@babel/core": "^7.16.10",
     "@babel/plugin-transform-modules-umd": "^7.16.7",
@@ -33,5 +33,8 @@
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-terser": "^7.0.2"
-  }
+  },
+  "files": [
+    "dist"
+  ]
 }
