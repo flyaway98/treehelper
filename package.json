@@ -1,0 +1,37 @@
+{
+  "name": "@3mcode/tree-helper",
+  "version": "0.1.0",
+  "description": "some useful tree functions",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "npm-run-all build:*",
+    "build:npm": "rollup -c -f umd && tsc --emitDeclarationOnly",
+    "build:browser": "rollup -c -f iife"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flyaway98/treehelper.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/flyaway98/treehelper/issues"
+  },
+  "homepage": "https://github.com/flyaway98/treehelper#readme",
+  "dependencies": {
+    "@babel/cli": "^7.16.8",
+    "@babel/core": "^7.16.10",
+    "@babel/plugin-transform-modules-umd": "^7.16.7",
+    "@babel/plugin-transform-runtime": "^7.16.10",
+    "@babel/preset-env": "^7.16.10",
+    "@babel/preset-typescript": "^7.16.7",
+    "@babel/runtime-corejs3": "^7.16.8",
+    "npm-run-all": "^4.1.5",
+    "rollup": "^2.64.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^7.0.2"
+  }
+}
