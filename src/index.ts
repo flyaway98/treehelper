@@ -16,7 +16,7 @@ export interface FlattenedItem {
 
 function flatten<T extends TreeItem,V extends FlattenedItem>(items: T[], parentId: string | null = null, depth = 0,visitPath = ''): V[] {
   return items.reduce<V[]>((acc, item, index) => {
-    const newItem = { ...item, parentId, depth, index,visitPath:`${visitPath}${item.id},`};
+    const newItem = { ...item,children:[], parentId, depth, index,visitPath:`${visitPath}${item.id},`};
     return [...acc, newItem, ...flatten(item.children ?? [], item.id, depth + 1,newItem.visitPath)] as V[];
   }, []);
 }
@@ -30,10 +30,16 @@ function countChildren<T extends TreeItem>(items: T[], count = 0): number {
   }, count);
 }
 
+/**
+ * @description: flatten the nested tree into a normal array
+ */
 export function flattenTree<T extends TreeItem,V extends FlattenedItem>(items: T[]) {
   return flatten<T,V>(items);
 }
-
+/**
+ * 
+ * @description: convert flattened array to nested tree array
+ */
 export function buildTree<T extends TreeItem,V extends FlattenedItem>(flattenedItems: V[]): T[] {
   const root = { id: 'root', name: '', children: [] };
   const nodes: Record<string, TreeItem> = { [root.id]: root };
@@ -47,18 +53,24 @@ export function buildTree<T extends TreeItem,V extends FlattenedItem>(flattenedI
   }
   return root.children;
 }
-
+/**
+ * @description traversing the tree node and  execute the action function for each tree node
+ */
 export function visitTree<T extends TreeItem>(items: T[], action: (item: T) => void) {
   for (let item of items) {
-    action(item);
+    if(typeof(action) === 'function')action(item);
     if (Array.isArray(item.children) && item.children.length > 0) visitTree(item.children as T[], action);
   }
 }
-
+/** 
+ * @description shallow search
+*/
 export function findItem<T extends TreeItem>(items: T[], itemId: string) {
   return items.find(({ id }) => id === itemId);
 }
-
+/** 
+ * @description deep search
+*/
 export function findItemDeep<T extends TreeItem>(items: T[], itemId: string): TreeItem | undefined {
   for (const item of items) {
     const { id, children } = item;
@@ -74,43 +86,48 @@ export function findItemDeep<T extends TreeItem>(items: T[], itemId: string): Tr
   }
   return undefined;
 }
-
+/** 
+ * @description remove tree node then return newtree nodes which not contains param id
+*/
 export function removeItem<T extends TreeItem>(items: T[], id: string): T[] {
   const newItems = [];
   for (const item of items) {
     if (item.id === id) {
       continue;
     }
-    if(!Array.isArray(item.children)) item.children = [];
-    else if (item.children.length) {
-      item.children = removeItem(item.children, id);
+    const newItem:T = {...item,children:[]}
+    newItems.push(newItem);
+    if (Array.isArray(item.children) && item.children.length) {
+      newItem.children = removeItem(item.children, id);
     }
-    newItems.push(item);
   }
   return newItems;
 }
-
+/** 
+ * @description  set tree node then return newtree nodes, and not change  original tree nodes
+*/
 export function setProperty<T extends TreeItem>(
   items: T[],
   id: string,
   propertyName: keyof T,
   setter: (item:T) => any,
 ) {
+  const newItems = [];
   for (const item of items) {
     if (item.id === id) {
       item[propertyName] = setter(item);
     }
-    if(!Array.isArray(item.children)){
-        item.children = [];
-    }
-    else if (item.children.length) {
-      item.children = setProperty(item.children, id, propertyName, setter);
+    const newItem:T = {...item,children:[]};
+    newItems.push(newItem);
+    if (Array.isArray(item.children) && item.children.length) {
+      newItem.children = setProperty(item.children, id,propertyName,setter);
     }
   }
-  return [...items];
+  return newItems;
 }
-
-
+/** 
+ * @description: count the number of all descendant nodes
+*/
 export function getChildCount<T extends TreeItem>(items: T[], id: string) {
   if (!id) {
     return 0;

@@ -93,17 +93,17 @@ action: This function is called when traversing the tree node, and the tree node
 @params:
   items:tree nodes,
   itemId:node id to search
-@returns: treeNode or undefined
+@returns: tree node or undefined
 ```
 
 ### function removeItem(items, id);
 
 ```
-@description: remove treeNode
+@description: remove tree node
 @params:
   items:tree nodes,
   id:node id to remove
-@returns: use deep copy to return new treeNodes
+@returns: return newtree nodes which not contains param id
 ```
 
 ### function setProperty(items, id, propertyName, setter);
@@ -114,12 +114,12 @@ action: This function is called when traversing the tree node, and the tree node
   id:node id to search,
   propertyName: property name
   setter: (treeNode) => newValue
-@returns: use deep copy to return new treeNodes
+@returns: return newtree nodes, and not change  original tree nodes
 ```
 ### function getChildCount(items, id);
 
 ```
-@description: set tree node
+@description: count the number of all descendant nodes
 @params:
   items:tree nodes,
   id:node id to search,
